@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('header.ejs') %>
+    <style type="text/css">
+        body {
+          background-color: #DADADA;
+        }
+        body > .grid {
+          height: 100%;
+        }
+        .image {
+          margin-top: -100px;
+        }
+        .column {
+          max-width: 450px;
+        }
+      </style>
+</head>
+<body>
+    <div class="ui middle aligned center aligned grid">
+        <div class="column">
+          <h2 class="ui teal image header">
+            <img src="/static/Semantic-UI/logo.png" class="image">
+            <div class="content">
+              Log-in to your account
+            </div>
+          </h2>
+          <form class="ui large form">
+            <div class="ui stacked segment">
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="lock icon"></i>
+                  <input type="password" id="i_old" placeholder="原密码">
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="lock icon"></i>
+                  <input type="password" id="i_new" placeholder="新密码">
+                </div>
+              </div>
+              <div class="ui fluid large teal submit button" id="b_submit">Submit!</div>
+            </div>
+      
+            <div class="ui error message"></div>
+            </form>
+        </div>
+      </div>
+      <script type="text/javascript">
+        function login() {
+            var $btn = $("#b_submit");
+            if ($btn.hasClass('disabled')) return;
+            var $input = $('#i_old');
+            var oldps = $input.val();
+            var $Input = $('#i_new');
+            var newps = $Input.val();
+            if (!oldps) {
+                $input.val('').focus();
+                return;
+            }
+            if (!newps) {
+                $Input.val('').focus();
+                return;
+            }
+            $btn.addClass('disabled');
+            $.ajax({
+                url: '/newpass',
+                method: 'post',
+                data: {
+                    oldps: oldps,
+                    newps: newps
+                },
+                dataType: 'json'
+            }).done(function(data) {
+                if (data.success) {
+                    location.href = data.result.url;
+                } else {
+                    alert(data.message);
+                    $input.select();
+                    $btn.removeClass('disabled');
+                }
+            }).fail(function() {
+                alert('未知错误!');
+                $btn.removeClass('disabled');
+            });
+        }
+        $('#b_submit').click(function() {
+            login();
+        });
+        $('#i_passwd').keyup(function(e) {
+            if (e.which === 13) login();
+        });
+    </script>
+</body>
+</html>

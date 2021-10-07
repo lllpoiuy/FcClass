@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('header.ejs') %>
+</head>
+<body>
+    <div class="ui grid">
+        <%- include('title.ejs') %>
+        <div class="two wide column"></div>
+        <div class="three wide column">
+            <%- include('tree.ejs') %>
+        </div>
+        <div class="nine wide column">
+            
+            <form class = "ui form">
+
+                <h4 class="ui dividing header"> 加分对象：</h4>
+                <div class = "two fields">
+                    <div class = "field">
+                        <lable> 座号 </lable>
+                        <input type = "text" id = "i_id" placeholder = "">
+                    </div>
+                    <div class = "field">
+                        <lable> 分值 </lable>
+                        <input type = "text" id = "i_vl"/>
+                    </div>
+                </div>
+                
+                <h4 class = "ui dividing header"> 加分理由：</h4>
+                <div class = "field">
+                    <input type = "text" id = "i_cause" placeholder="必填"/>
+                </div>
+                <h4 class = "ui dividing header"></h4>
+                <div class = "two fields">
+                    <div class = "field">
+                        <select class = "ui fluid dropdown" id = "i_item" onchange="func()">
+                            <option value = ""> 请选择加分项 </option>
+                            <option value = "learning"> learning </option>
+                            <option value = "contribution"> contribution </option>
+                            <option value = "performance"> performance </option>
+                        </select>
+                    </div>
+                    <div class = "field">
+                        <div class="ui fluid large teal submit button" id="b_submit">Submit!</div>
+                    </div>
+                </div>
+                
+            </form>
+
+        </div>
+        <div class="three wide column"> </div>
+    </div>
+    <script type="text/javascript">
+        function submit() {
+            
+            var $input_id = $('#i_id');
+            var $input_item = $('#i_item');
+            var $input_cause = $('#i_cause');
+            var $input_vl = $('#i_vl');
+            var $btn = $("#b_submit");
+            if ($btn.hasClass('disabled')) return;
+            var idd = $input_id.val();
+            // var term = $input_term.val();
+            var item = $input_item.val();
+            var vl = $input_vl.val();
+            // alert(type);
+            var cause = $input_cause.val();
+            if (!idd) {
+                $input_id.val('').focus();
+                return;
+            }
+            if (!cause) {
+                $input_cause.val('').focus();
+                return;
+            }
+            if (!item) {
+                $input.cause.val(''.focus());
+            }
+            if (!vl) {
+                $input_vl.val('').focus();
+                return;
+            }
+            $btn.addClass('disabled');
+            $.ajax({
+                url: '/edit',
+                method: 'post',
+                data: {
+                   id : idd,
+                   delta : vl,
+                   type : "else",
+                   cause : cause,
+                   item : item,
+                   page : "/else"
+                },
+                dataType: 'json'
+            }).done(function(data) {
+                if (data.success) {
+                    alert(data.message);
+                    $btn.removeClass('disabled');
+                    location.href = data.url;
+                } else {
+                    alert(data.message);
+                    // $input.select();
+                    $btn.removeClass('disabled');
+                }
+            }).fail(function() {
+                alert('未知错误!');
+                $btn.removeClass('disabled');
+            });
+        }
+        $('#b_submit').click(function() {
+            submit();
+        });
+        // $('#i_term').keyup(function(e) {
+        //     if (e.which === 13) login();
+        // });
+    </script>
+</body>
+</html>

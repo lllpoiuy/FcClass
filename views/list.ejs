@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('header.ejs') %>
+</head>
+<body>
+    <div class="ui grid">
+        <%- include('title.ejs') %>
+        <div class="two wide column"></div>
+        <div class="three wide column">
+            <%- include('tree.ejs') %>
+        </div>
+        <div class="nine wide column">
+            
+            <!-- <form class="ui form" style = "background-color: white;"> -->
+                <h4 class="ui horizontal divider header">
+                    <i class="tag icon"></i>
+                    Sort by:
+                </h4>
+                <center>
+                <div class="ui buttons">
+                    <%if(sortBy=="id"){%><button class="ui active button"><%}else{%><button class="ui button"><%}%><a href="/list/id">id</a></button>
+                    <%if(sortBy=="learning"){%><button class="ui active button"><%}else{%><button class="ui button"><%}%><a href="/list/learning">learning</a></button>
+                    <%if(sortBy=="contribution"){%><button class="ui active button"><%}else{%><button class="ui button"><%}%><a href="/list/contribution">contribution</a></button>
+                    <%if(sortBy=="performance"){%><button class="ui active button"><%}else{%><button class="ui button"><%}%><a href="/list/performance">performance</a></button>
+                    <%if(sortBy=="score"){%><button class="ui active button"><%}else{%><button class="ui button"><%}%><a href="/list/score">score</a></button>
+                </div></center>
+
+                <h4 class="ui horizontal divider header">
+                    <i class="bar chart icon"></i>
+                    Table
+                </h4>
+                <table class="ui definition table">
+                <thead>
+                    <tr>
+                        <!-- <%for(var i in table[0]) {%>
+                            <th><%=i %></th>
+                        <%}%> -->
+                        <!-- <th> 座号 </th> -->
+                        <th> Student </th>
+                        <th class="center aligned"> Learning </th>
+                        <th class="center aligned"> Contribution </th>
+                        <th class="center aligned"> Performance </th>
+                        <th class="center aligned"> Total Score </th>
+                    </tr>
+                </thead>
+        
+                <tbody>
+                    <%for(var j= 0; j < table.length; j++) { %>
+                        <tr>
+                            <td>
+                                <h4 class="ui image header">
+                                    <%if(table[j]['sex']=='girl'){%>
+                                        <img src="/static/girl.png" class="ui mini rounded image">
+                                    <%}else{%>
+                                        <img src="/static/boy.png" class="ui mini rounded image">
+                                    <%}%>   
+                                    <div class="content">
+                                        <%= table[j]['id'] %>
+                                      <div class="sub header"><%= table[j]['rname'] %>
+                                    </div>
+                                  </div>
+                                </h4>
+                            </td>
+                            <!-- <td><%= table[j]['id'] %></td>
+                            <td><%= table[j]['rname'] %></td> -->
+                            <td class="center aligned"><%= table[j]['learning'] %></td>
+                            <td class="center aligned"><%= table[j]['contribution'] %></td>
+                            <td class="center aligned"><%= table[j]['performance'] %></td>
+                            <td class="center aligned"><%= table[j]['score'] %></td>
+                        </tr>
+                    <%}%>
+                </tbody>
+            </table>
+            <!-- </form> -->
+        </div>
+        <div class="three wide column"> </div>
+    </div>
+    
+</body>
+</html>

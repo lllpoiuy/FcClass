@@ -1,0 +1,37 @@
+<h2></h2>
+<div class="ui vertical menu">
+    <div class="item">
+        <h4 class="ui header">
+            <img class="ui image" src="/static/plane.jpg">
+            <div class="content">
+              导航
+            </div>
+          </h4>
+    </div>
+    <div class="item">
+        加分项：
+        <div class="menu">
+            <%if(nowpos=="compete"){%><a class="active item"><%}else{%><a class="item" href = "/compete"><%}%> 竞赛加分</a>
+            <%if(nowpos=="contest"){%><a class="active item"><%}else{%><a class="item" href = "/contest"><%}%> 大考成绩</a>
+            <!-- <%if(nowpos=="contribute"){%><a class="active item"><%}else{%><a class="item"><%}%> 贡献加分</a> -->
+            <%if(nowpos=="else"){%><a class="active item"><%}else{%><a class="item" href = "/else"><%}%> 其他加分</a>
+        </div>
+    </div>
+    <%if(nowpos=="minus"){%><a class="active item"><%}else{%><a class="item" href = "/minus"><%}%> 扣分</a>
+    <%if(nowpos=="history"){%><a class="active item"><%}else{%><a class="item" href = "/history"><%}%> 明细</a>
+    <%if(nowpos=="list"){%><a class="active item"><%}else{%><a class="item" href = "/list/id"><%}%>排行榜</a>
+    <div class="ui dropdown item">
+        More
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href = "/print"><i class="globe icon"></i> 导出为 excel </a>
+          <a class="item" href = "/epswd"><i class="edit icon"></i> 修改密码 </a>
+          <!-- <a class="item"><i class="settings icon"></i> Account Settings</a> -->
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $('.ui.dropdown.item').dropdown();
+    });
+</script>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('header.ejs') %>
+</head>
+<body>
+    <div class="ui grid">
+        <%- include('title.ejs') %>
+        <div class="two wide column"></div>
+        <div class="three wide column">
+            <%- include('tree.ejs') %>
+        </div>
+        <div class="nine wide column">
+            <form class="ui form">
+
+            <h4 class="ui dividing header"> 比赛类别：</h4>
+            <div class = "two fields">
+                <div class = "field">
+                    <lable> 类型 </lable>
+                    <select class = "ui fluid dropdown" id = "i_type" onchange="func()">
+                        <option value = ""> 请选择 </option>
+                        <option value = "ss"> 省赛 </option>
+                        <option value = "gs"> 国赛 </option>
+                        <option value = "qt"> 其他 </option>
+                    </select>
+                </div>
+                <div class = "field">
+                    <lable> 分值 </lable>
+                    <input type = "text" id = "i_vl"/>
+                </div>
+            </div>
+            
+            <h4 class="ui dividing header"> 比赛名称：</h4>
+            <div class = "field">
+                <input type = "text" id = "i_cause"/>
+            </div>
+            <h4 class="ui dividing header"> 加分对象：</h4>
+            <div class="field">
+                <div class="ui fluid multiple search selection dropdown">
+                    <input type="hidden" id="i_id">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">可多选</div>
+                    <div class="menu">
+                        <%for(var i=1;i<=51;i++) {%>
+                            <div class="item" data-value=<%=i%> > <%=i%> </div>
+                        <%}%>
+                    </div>
+                </div>
+            </div>
+                
+            <h4 class = "ui dividing header"></h4>
+            <div class="ui fluid large teal submit button" id="b_submit">Submit!</div>
+            
+            </form>
+        </div>
+        <div class="three wide column"> </div>
+    </div>
+    <script type="text/javascript">
+        var table = {
+            ss : { vl : 4, tp : "省赛" },
+            gs : { vl : 6, tp : "国赛" },
+            qt : { vl : 3, tp : "其他比赛" }
+        }
+        jQuery(function($) {
+            // $input_term.val('<%=nowTerm%>');
+        });
+        function func() {
+            var $input_type = $('#i_type');
+            var type = $input_type.val();
+            // alert(type);
+            $('#i_vl').val(table[type].vl);
+        }
+        function submit() {
+            
+            var $input_id = $('#i_id');
+            var $input_type = $('#i_type');
+            var $input_cause = $('#i_cause');
+            var $input_vl = $('#i_vl');
+            var $btn = $("#b_submit");
+            if ($btn.hasClass('disabled')) return;
+            var idd = $input_id.val();
+            var type = $input_type.val();
+            var vl = $input_vl.val();
+            var cause = $input_cause.val();
+            //alert(idd);
+            if (!idd) {
+                $input_id.val('').focus();
+                return;
+            }
+            if (!type) {
+                $input_type.val('').focus();
+                return;
+            }
+            if (!vl) {
+                $input_vl.val('').focus();
+                return;
+            }
+            // alert("after judge");
+            $btn.addClass('disabled');
+            var nowId = 0;
+            for (var i = 0; i < idd.length; i++) {
+                if (idd[i] == ',') {
+                    $.ajax({
+                            url: '/edit',
+                            method: 'post',
+                            data: {
+                            id : nowId,
+                            delta : vl,
+                            type : table[type].tp,
+                            cause : cause,
+                            item : "learning",
+                            page : "/compete"
+                        },
+                        dataType: 'json'
+                    }).done(function(data) {
+                        if (!data.success) {
+                            alert(data.message);
+                            $btn.removeClass('disabled');
+                        }
+                    }).fail(function() {
+                        alert('未知错误!');
+                        $btn.removeClass('disabled');
+                    });
+                    nowId = 0;
+                }
+                else nowId = nowId * 10 + parseInt(idd[i]);
+            }
+            if (nowId) {
+                $.ajax({
+                        url: '/edit',
+                        method: 'post',
+                        data: {
+                        id : nowId,
+                        delta : vl,
+                        type : table[type].tp,
+                        cause : cause,
+                        item : "learning",
+                        page : "/compete"
+                    },
+                    dataType: 'json'
+                }).done(function(data) {
+                    if (!data.success) {
+                        alert(data.message);
+                        $btn.removeClass('disabled');
+                    }
+                }).fail(function() {
+                    alert('未知错误!');
+                    $btn.removeClass('disabled');
+                });
+            }
+            alert('已提交修改');
+            $btn.removeClass('disabled');
+        }
+        $('#b_submit').click(function() {
+            submit();
+        });
+        // $('#i_term').keyup(function(e) {
+        //     if (e.which === 13) login();
+        // });
+    </script>
+    <script>
+        $(function(){
+            $('.ui.selection.dropdown').dropdown();
+        });
+    </script>
+    
+</body>
+</html>
+

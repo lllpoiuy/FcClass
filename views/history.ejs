@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('header.ejs') %>
+</head>
+<body>
+    <div class="ui grid">
+        <%- include('title.ejs') %>
+        <div class="two wide column"></div>
+        <div class="three wide column">
+            <%- include('tree.ejs') %>
+        </div>
+        <div class="nine wide column">
+            
+                <h4 class="ui horizontal divider header">
+                    <i class="tag icon"></i>
+                    Query:
+                </h4>
+
+                <form class = "ui form">
+                    <div class="field">
+                        <!-- <label>序号</label> -->
+                        <div class="four fields">
+                            <div class="field">
+                                <input type="text" id = "i_id" placeholder="id (necessary)">
+                            </div>
+                            <div class="field">
+                                <input type="text" id = "i_term" placeholder="term (necessary)">
+                            </div>
+                            <div class="field">
+                                <input type="text" id = "i_item" placeholder="item">
+                            </div>
+                            <div class="ui teal submit button" id="b_submit">click here to query!</div>
+                        </div>
+                    </div>
+                </form>
+
+                <h4 class="ui horizontal divider header">
+                    <i class="bar chart icon"></i>
+                    Table
+                </h4>
+                <table class="ui table">
+                <thead>
+                    <tr>
+                        <th> Student </th>
+                        <th> Term </th>
+                        <th> Type </th>
+                        <th> Detail </th>
+                        <th> Item </th>
+                        <th> Delta </th>
+                    </tr>
+                </thead>
+        
+                <tbody>
+                    <%for(var j= 0; j < table.length; j++) { %>
+                        <tr>
+                            <td><%= table[j]['user'] %></td>
+                            <td><%= table[j]['term'] %></td>
+                            <td><%= table[j]['type'] %></td>
+                            <td><%= table[j]['cause'] %></td>
+                            <td><%= table[j]['item'] %></td>
+                            <td><%= table[j]['delta'] %></td>
+                        </tr>
+                    <%}%>
+                </tbody>
+            </table>
+            <!-- </form> -->
+        </div>
+        <div class="three wide column"> </div>
+    </div>
+    <script type="text/javascript">
+        function login() {
+            var $btn = $("#b_submit");
+            if ($btn.hasClass('disabled')) return;
+            var $input_id = $('#i_id');
+            var id = $input_id.val();
+            var $input_term = $('#i_term');
+            var term = $input_term.val();
+            var $input_item = $('#i_item');
+            var item = $input_item.val();
+            if (!id) {
+                $input_id.val('').focus();
+                return;
+            }
+            if (!term) {
+                $input_term.val('').focus();
+                return;
+            }
+            $btn.addClass('disabled');
+            location.href = '/history/' + id + "/" + term + "/" + item;
+        }
+        $('#b_submit').click(function() {
+            login();
+        });
+        $('#i_term').keyup(function(e) {
+            if (e.which === 13) login();
+        });
+    </script>
+</body>
+</html>
